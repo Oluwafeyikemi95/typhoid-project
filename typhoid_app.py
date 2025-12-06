@@ -1,48 +1,38 @@
+# typhoid_app.py
 import streamlit as st
 import joblib
 import numpy as np
-import gdown
 import os
-
-# -----------------------------
-# Download model if not exists
-# -----------------------------
-model_path = "typhoid_model.pkl"
-file_id = "1NWIeM9_wRakpy3h3FqT9RnXJ6mkbbl7D"
-
-if not os.path.exists(model_path):
-    url = f"https://drive.google.com/uc?id={file_id}"
-    gdown.download(url, model_path, quiet=False)
 
 # -----------------------------
 # Load model and scaler
 # -----------------------------
-model = joblib.load(model_path)
+model = joblib.load("typhoid_model.pkl")
 scaler = joblib.load("scaler.pkl")
-
-# -----------------------------
-# Feature setup
-# -----------------------------
 expected_features = scaler.n_features_in_
+
+st.title("🩺 Typhoid Prediction App")
 st.write(f"Scaler expects {expected_features} features.")
 
-# Main 6 features (user input)
-year = st.number_input("Year", value=2025)
-week = st.number_input("Week", value=42)
-uganda_cases = st.number_input("Cases in Uganda", value=990)
-rainfall = st.number_input("Rainfall (mm)", value=84.83)
-temperature = st.number_input("Temperature (°C)", value=28.05)
-humidity = st.number_input("Humidity (%)", value=69.95)
+# -----------------------------
+# User inputs
+# -----------------------------
+age = st.number_input("Age", value=30, min_value=0)
+gender = st.selectbox("Gender", ["Male", "Female"])
+gender_val = 0 if gender == "Male" else 1
+socio_status = st.number_input("Socioeconomic Status", value=1, min_value=0)
+water_type = st.number_input("Water Source Type", value=1, min_value=0)
+blood_culture = st.number_input("Blood Culture Result", value=0, min_value=0)
+widal_test = st.number_input("Widal Test", value=0, min_value=0)
+typhidot_test = st.number_input("Typhidot Test", value=0, min_value=0)
+vaccination_status = st.number_input("Typhoid Vaccination Status", value=0, min_value=0)
+weather_condition = st.number_input("Weather Condition", value=1, min_value=0)
 
-input_data = [year, week, uganda_cases, rainfall, temperature, humidity]
-
-# Fill remaining features with realistic defaults
-remaining_features = expected_features - len(input_data)
-if remaining_features > 0:
-    # You can adjust these defaults based on typical values
-    default_values = [50.0, 70.0, 0.8]  # Example: mobility index, sanitation score, vaccination rate
-    input_data += default_values[:remaining_features]
-
+# Combine features
+input_data = [
+    age, gender_val, socio_status, water_type, blood_culture,
+    widal_test, typhidot_test, vaccination_status, weather_condition
+]
 X = np.array([input_data])
 
 # -----------------------------
@@ -54,7 +44,8 @@ if st.button("Predict"):
     else:
         X_scaled = scaler.transform(X)
         pred = model.predict(X_scaled)[0]
-        st.success(f"Predicted Typhoid Cases in Kases: {pred:.1f}")
+        st.success(f"Predicted Typhoid Status: {pred}")
+
 
 
 
