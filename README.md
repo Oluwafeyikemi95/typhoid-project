@@ -1,1 +1,1 @@
-https://colab.research.google.com/drive/1x2DZb4pELMQbUimMLsB70DmR-89rEZXE?usp=sharin
+"https://drive.google.com/uc?id=1NWIeM9_wRakpy3h3FqT9RnXJ6mkbbl7D"
