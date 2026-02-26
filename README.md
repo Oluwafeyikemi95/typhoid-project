@@ -29,3 +29,9 @@ Typhoid fever is a serious infectious disease that requires early detection. Thi
 1. Install the required dependencies:
    ```bash
    pip install -r requirements.txt
+
+
+
+   model.pkl file is being saved in google drive because it's a large file
+   
+   https://drive.google.com/file/d/1NWIeM9_wRakpy3h3FqT9RnXJ6mkbbl7D/view?usp=sharing
